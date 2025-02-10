@@ -1,0 +1,67 @@
+Main del programa
+#include <iostream>
+#include "Triangulo.h"
+using namespace std;
+
+int main()
+{
+    float base, altura;
+
+
+
+
+    do{
+        cout << "Ingresa la base: ";
+        cin >> base;
+
+    } while (base < 1);
+    do {
+        cout << "Ingrese la altura: ";
+        cin >> altura;
+
+    } while (altura < 1);
+    Triangulo Triangulito;   //Declarar el objeto utilizado en el programa
+    Triangulito.set_altura(altura);  
+    Triangulito.set_base(base);
+    cout<<"El area es: "<<Triangulito.area();
+}
+
+Implementacion de la clase
+
+#include "Triangulo.h"
+
+Triangulo::Triangulo() {
+}
+void Triangulo::set_altura(float _altura) {
+	altura = _altura;
+}
+void Triangulo::set_base(float _base) {
+	base = _base;
+}
+float Triangulo::get_altura() {
+	return altura;
+}
+float Triangulo::get_base() {
+	return base;
+}
+float Triangulo::area(){
+	return (base * altura) / 2;
+}
+
+Cabecera de la clase
+
+#pragma once
+class Triangulo
+{
+private:
+	float base;
+	float altura;
+public:
+	Triangulo();
+	void set_altura(float _altura);
+	void set_base(float _base);
+	float get_altura();
+	float get_base();
+	float area();
+
+};
