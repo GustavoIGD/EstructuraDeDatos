@@ -1,0 +1,170 @@
+// ejemplostruct.cpp : Este archivo contiene la función "main". La ejecución del programa comienza y termina ahí.
+//
+
+#include <iostream>
+#include <string>
+#define MAX 100
+using namespace std;
+
+struct t_empleados {
+    int id;
+    string nombre, fechanac;
+    float sb, sn;
+};
+
+// Prototipos
+void cargarvector(t_empleados v[], int n);
+void clasificarburbuja(t_empleados v[], int n);
+bool busquedacodigo(t_empleados v[], int n, int clave, int& z);
+void listarplanilla(t_empleados v[], int n);
+float salarioneto(float sb);
+float promedio(t_empleados v[], int n);
+
+int main() {
+    t_empleados empleados[MAX]; // Vector local
+    int opcion, N = 0, codigo, pos = 0;
+    bool bandera;
+
+    do {
+        // Menú
+        cout << "\n---- Menu ----" << endl;
+        cout << "1. Cargar vector" << endl;
+        cout << "2. Clasificar burbuja" << endl;
+        cout << "3. Busqueda de codigo" << endl;
+        cout << "4. Listar planilla" << endl;
+        cout << "5. Salario neto" << endl;
+        cout << "6. Promedio" << endl;
+        cout << "0. Salir" << endl;
+        cout << "Seleccione una opcion: ";
+        cin >> opcion;
+
+        switch (opcion) {
+        case 1:
+            do {
+                cout << "Introducir el numero de empleados: ";
+                cin >> N;
+            } while (N > MAX || N <= 0);
+            cargarvector(empleados, N);
+            break;
+        case 2:
+            clasificarburbuja(empleados, N);
+            break;
+        case 3:
+            cout << "Ingrese el codigo a buscar: ";
+            cin >> codigo;
+            bandera = busquedacodigo(empleados, N, codigo, pos);
+            if (bandera) {
+                cout << "Codigo: " << empleados[pos].id << endl;
+                cout << "Nombre: " << empleados[pos].nombre << endl;
+                cout << "Fecha Nacimiento: " << empleados[pos].fechanac << endl;
+                cout << "Sueldo Bruto: " << empleados[pos].sb << endl;
+                cout << "Sueldo Neto: " << empleados[pos].sn << endl;
+            }
+            else {
+                cout << "No existe el codigo del empleado." << endl;
+            }
+            break;
+        case 4:
+            listarplanilla(empleados, N);
+            break;
+        case 5:
+            cout << "Introduzca el codigo del empleado: ";
+            cin >> codigo;
+            bandera = busquedacodigo(empleados, N, codigo, pos);
+            if (bandera) {
+                cout << "Sueldo neto: " << salarioneto(empleados[pos].sb) << endl;
+            }
+            else {
+                cout << "No existe el empleado." << endl;
+            }
+            break;
+        case 6:
+            cout << "El promedio del sueldo bruto es: " << promedio(empleados, N) << endl;
+            break;
+        case 0:
+            cout << "Saliendo del programa." << endl;
+            break;
+        default:
+            cout << "Opcion invalida." << endl;
+        }
+
+    } while (opcion != 0);
+
+    return 0;
+}
+
+void cargarvector(t_empleados v[], int n) {
+    for (int i = 0; i < n; i++) {
+        cout << "\nEmpleado " << i + 1 << endl;
+        cout << "ID: ";
+        cin >> v[i].id;
+        cin.ignore();
+
+        cout << "Nombre: ";
+        getline(cin, v[i].nombre);
+
+        cout << "Fecha de nacimiento (dd/mm/aaaa): ";
+        getline(cin, v[i].fechanac);
+
+        cout << "Sueldo bruto: ";
+        cin >> v[i].sb;
+
+        v[i].sn = salarioneto(v[i].sb); // Calcula sueldo neto
+        cin.ignore();
+    }
+}
+
+float promedio(t_empleados v[], int n) {
+    if (n == 0) {
+        cout << "No hay empleados en la lista." << endl;
+        return 0;
+    }
+
+    float suma = 0;
+    for (int i = 0; i < n; i++) {
+        suma += v[i].sb;
+    }
+    return suma / n;
+}
+
+void listarplanilla(t_empleados v[], int n) {
+    float total = 0;
+    cout << "\nPLANILLA DE SUELDOS" << endl;
+    cout << "ID\tNombre\t\tSueldo Bruto\tSueldo Neto" << endl;
+    cout << "----------------------------------------------" << endl;
+
+    for (int i = 0; i < n; i++) {
+        v[i].sn = salarioneto(v[i].sb);
+        total += v[i].sn;
+        cout << v[i].id << "\t" << v[i].nombre << "\t\t" << v[i].sb << "\t\t" << v[i].sn << endl;
+    }
+
+    float prom = total / n;
+    cout << "\nPromedio de sueldo neto: " << prom << endl;
+}
+
+void clasificarburbuja(t_empleados v[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (v[i].nombre > v[j].nombre) {
+                t_empleados temp = v[i];
+                v[i] = v[j];
+                v[j] = temp;
+            }
+        }
+    }
+}
+
+bool busquedacodigo(t_empleados v[], int n, int clave, int& z) {
+    for (int i = 0; i < n; i++) {
+        if (v[i].id == clave) {
+            z = i;
+            return true;
+        }
+    }
+    return false;
+}
+
+float salarioneto(float sb) {
+    return sb * 0.87; // 13% descuento
+}
