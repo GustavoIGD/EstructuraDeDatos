@@ -1,0 +1,102 @@
+DATO.H
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Dato
+{
+private:
+	int id;
+	string nombreCliente;
+	float cantidadDeAceite;
+public:
+	Dato();
+	void set_id(int _id);
+	void set_nombre(string _nombreCliente);
+	void set_cantidadDeAceite(float _cantidadDeAceite);
+	int get_id();
+	string get_nombreCliente();
+	float get_cantidadDeAceite();
+};
+
+PILA.H
+
+#define MAX 100
+#include <iostream>
+using namespace std;
+
+class Pila
+{
+private:
+	int cima;
+	int vect[MAX];
+public:
+	Pila();
+	int Apilar();
+	void Desapilar();
+	int VerCima();
+	bool empty();
+
+};
+
+DATO.CPP
+
+#include "Dato.h"
+#include <iostream>
+#include <string>
+using namespace std;
+
+Dato::Dato() {
+
+}
+void Dato::set_id(int _id) {
+	id = _id;
+}
+void Dato::set_nombre(string _nombreCliente) {
+	nombreCliente = _nombreCliente;
+}
+void Dato::set_cantidadDeAceite(float _cantidadDeAceite) {
+	cantidadDeAceite = _cantidadDeAceite;
+}
+int Dato::get_id() {
+	return id;
+}
+string Dato::get_nombreCliente() {
+	return nombreCliente;
+}
+float Dato::get_cantidadDeAceite() {
+	return cantidadDeAceite;
+}
+
+MAIN
+
+#include "Dato.h"
+#include <string>
+#include <iostream>
+using namespace std;
+
+int main()
+{
+	int id, vol;
+	string name;
+	Dato Datito;
+
+
+	cout << "Ingresa el id: ";
+	cin >> id;
+	Datito.set_id(id);
+	cout << "Ingresa el nombre: ";
+	cin >> name;
+	Datito.set_nombre(name);
+	cout << "Ingresa el volumen a comprar: ";
+	cin >> vol;
+	Datito.set_cantidadDeAceite(vol);
+	cout << "El id es: "<<Datito.get_id()<<endl;
+	cout << "El nombre es: "<< Datito.get_nombreCliente() << endl;
+	cout << "La cantidad en litros es: "<<Datito.get_cantidadDeAceite() << endl;
+	
+
+
+	return 0;
+}
