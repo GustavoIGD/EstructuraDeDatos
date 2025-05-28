@@ -1,0 +1,144 @@
+#include <iostream>
+using namespace std;
+
+class Node {
+public:
+    string name;
+    string product;
+    int amount;
+    int price;
+    Node* next;
+};
+
+class LinkedList {
+private:
+    Node* first;
+public:
+    LinkedList() {
+        first = nullptr;
+    }
+    LinkedList(string clientes[],string productos[],int cantidades[],int precios[], int n);
+    void display();
+    void insert(int index, string nombre, string producto, int cantidad, int precio);
+    int length();
+    int mayor();
+    int menor();
+    string searchClient(int aporte);
+    int deleteNode();
+    int prom(int n);
+};
+
+LinkedList::LinkedList(string clientes[], string productos[], int cantidades[], int precios[], int n) {
+    Node* t, * last;
+    first = new Node();
+    first->name= clientes[0];
+    first->product = productos[0];
+    first->amount = cantidades[0];
+    first->price = precios[0];
+    first->next = nullptr;
+    last = first;
+    for (int i = 1;i < n;i++) {
+        t = new Node();
+        t->name = clientes[i];
+        t->product = productos[i];
+        t->amount = cantidades[i];
+        t->price = precios[i];
+        last->next = t;
+        last = t;
+    }
+}
+void LinkedList::display() {
+    Node* p = first;
+    while (p) {
+        cout << p->name<<" "<<p->product << " " << p->amount << " " << p->price << " " << p->price * p->amount << endl;
+        p = p->next;
+    }
+}
+
+int LinkedList::length() {
+    Node* p = first;
+    int contador = 0;
+    while (p) {
+        contador = contador + 1;
+        p = p->next;
+    }
+    return contador;
+}
+
+int LinkedList::mayor() {
+    Node* p = first;
+    int maximo = 0;
+    while (p) {
+        if (p->price*p->amount > maximo)
+            maximo = p->price * p->amount;
+        p = p->next;
+    }
+    return maximo;
+}
+int LinkedList::menor() {
+    Node* p = first;
+    int minimo = first->price * first->amount;
+    while (p) {
+        if (p->price * p->amount < minimo)
+            minimo = p->price * p->amount;
+        p = p->next;
+    }
+    return minimo;
+}
+void LinkedList::insert(int index, string nombre, string producto, int cantidad, int precio) {
+    Node *t= new Node;
+    Node *p = first;
+    t->name = nombre;
+    t->product = producto;
+    t->amount = cantidad;
+    t->price = precio;
+    if (index == 0) {
+        t->next = first;
+        first = t;
+    }
+    else {
+        for (int i = 1;i <= index-1;i++) {
+            p = p->next;
+        }
+        t->next = p->next;
+        p->next = t;
+    }
+
+}
+
+string LinkedList::searchClient(int aporte) {
+    Node* p = first;
+    while (p) {
+        if (p->amount * p->price == aporte)
+            return p->name;
+        else
+            p = p->next;
+    }
+    return "Cliente no econtrado";
+}
+int LinkedList::prom(int n) {
+    Node* p = first;
+    int contador = 0;
+    while (p) {
+        contador = contador + (p->amount*p->price);
+        p = p->next;
+    }
+    return contador/n;
+}
+int main() {
+    string clientes[] = { "LUIS","PEPE","MARIA","CARLOS" };
+    string productos[] = { "CELULAR","TABLET","CELULAR","TABLET" };
+    int cantidades[] = { 2,1,4,3};
+    int precios[] = { 7000,8000,7000,8000 };
+    int n = sizeof(clientes) / sizeof(clientes[0]);
+    LinkedList lista(clientes,productos,cantidades,precios, n);
+    lista.display();
+    cout<<"promedio de importe:"<<lista.prom(lista.length())<<endl;
+    cout << "El tamaño de la lista es: " << lista.length() << endl;
+    cout << "El cliente con Mayor compra es: " << lista.searchClient(lista.mayor()) << "con una compra de:"<<lista.mayor()<<endl;
+    cout << "El cliente con Menor compra es: " << lista.searchClient(lista.menor()) << "con una compra de "<<lista.menor()<<endl;
+    lista.insert(2, "JUAN", "LAPTOP", 3, 5000);
+    lista.display();
+    cout << "promedio de importe:" << lista.prom(lista.length()) << endl;
+    return 0;
+}
